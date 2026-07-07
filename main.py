@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel, Field
 from typing import Literal
 
 app = FastAPI()
@@ -17,6 +17,19 @@ class ChatResponse(BaseModel):
     model: str
     success: bool
 
+class ThreadResponse(BaseModel):
+    thread_id: int
+    title: str
+
+class ThreadQuery(BaseModel):
+    limit: int = Field(default=10, ge=1, lt=100)
+    offset: int = Field(default=0, ge=0)
+
+fake_threads = {
+    1: "LangGraph discussion",
+    2: "FastAPI notes",
+    3: "RAG ideas"
+}
 
 @app.get("/health", response_model=HealthResponse)
 def get_health():
@@ -25,3 +38,35 @@ def get_health():
 @app.post("/chat", response_model=ChatResponse)
 def chat_response(request: ChatRequest):
     return ChatResponse(answer=f"You said: {request.message}", model="fake-llm-v1", success=True)
+
+@app.get("/threads/{thread_id}", response_model=ThreadResponse)
+def get_thread(thread_id: int):
+    if (thread_id not in fake_threads):
+        raise HTTPException(status_code=404, detail="Thread Not Found")
+    return ThreadResponse(thread_id=thread_id, title=fake_threads[thread_id])
+
+@app.get("/threads", response_model=list[ThreadResponse], )
+def get_threads(thread_info: ThreadQuery = Depends()):
+    response: list[ThreadResponse] = []
+    remaining = thread_info.limit
+    skip = thread_info.offset
+    for thread_id, title in fake_threads.items():
+
+        if skip > 0:
+            skip -= 1
+            continue
+
+        if remaining == 0:
+            break
+
+        response.append(
+            ThreadResponse(
+                thread_id=thread_id,
+                title=title
+            )
+        )
+
+        remaining -= 1
+    if not response:
+        raise HTTPException(status_code=404, detail="Threads Not Found")
+    return response
