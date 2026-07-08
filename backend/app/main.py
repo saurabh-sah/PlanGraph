@@ -1,12 +1,12 @@
-from app.schemas import *
+from .schemas import *
 
 from fastapi import FastAPI
 
-from app import models
-from app.db.engine import engine
-from app.models.base import Base
+from . import models
+from .db.engine import engine
+from .models.base import Base
 
-from app.routes import *
+from .routes import *
 
 app = FastAPI()
 
