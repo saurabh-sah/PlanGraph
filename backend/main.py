@@ -2,6 +2,13 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Literal
 
+import app.models
+
+from app.models.base import Base
+from app.db.engine import engine
+
+Base.metadata.create_all(engine)
+
 app = FastAPI()
 
 class HealthResponse(BaseModel):
