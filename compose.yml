@@ -1,7 +1,6 @@
 services:
   postgres:
     image: pgvector/pgvector:pg17
-    restart: unless-stopped 
     container_name: plangraph-postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
