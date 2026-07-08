@@ -1,6 +1,6 @@
 from typing import Literal
 
-import app.models
+from app.schemas import *
 
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -16,43 +16,6 @@ Base.metadata.create_all(engine)
 
 app = FastAPI()
 
-
-# -----------------------------
-# Schemas
-# -----------------------------
-
-class HealthResponse(BaseModel):
-    status: Literal["healthy", "unhealthy"]
-    database: Literal["connected", "disconnected"]
-    version: str
-
-
-class ChatRequest(BaseModel):
-    message: str
-
-
-class ChatResponse(BaseModel):
-    answer: str
-    model: str
-    success: bool
-
-
-class ThreadCreateRequest(BaseModel):
-    title: str
-    user_id: int
-
-
-class ThreadResponse(BaseModel):
-    id: int
-    title: str
-    user_id: int
-
-
-class ThreadQuery(BaseModel):
-    limit: int = Field(default=10, ge=1, lt=100)
-    offset: int = Field(default=0, ge=0)
-
-
 # -----------------------------
 # Temporary Fake Data
 # -----------------------------
@@ -62,7 +25,6 @@ fake_threads = {
     2: "FastAPI notes",
     3: "RAG ideas",
 }
-
 
 # -----------------------------
 # Routes
