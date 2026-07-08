@@ -1,1 +1,1 @@
-from .ThreadService import create_thread
+from .thread_service import create_thread

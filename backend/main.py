@@ -7,9 +7,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.db.engine import engine
-from app.db.sessions import get_db
+from backend.app.db.session import get_db
 from app.models.base import Base
-from app.services.ThreadService import create_thread
+from backend.app.services.thread_service import create_thread
 
 
 Base.metadata.create_all(engine)
