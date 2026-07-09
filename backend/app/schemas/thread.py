@@ -18,3 +18,7 @@ class ThreadQuery(BaseModel):
 
 class ThreadUpdateRequest(BaseModel):
     title: str
+
+class DeleteThreadResponse(BaseModel):
+    success: bool
+    message: str
