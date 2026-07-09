@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.schemas.thread import ThreadCreateRequest, ThreadQuery, ThreadResponse, ThreadUpdateRequest
+from app.schemas.thread import ThreadCreateRequest, ThreadQuery, ThreadResponse, ThreadUpdateRequest, DeleteThreadResponse
 
 from sqlalchemy.orm import Session
 
 from backend.app.db.session import get_db
-from backend.app.services.thread_service import create_thread, update_thread
+from backend.app.services.thread_service import create_thread, update_thread, delete_thread
 from services.thread_service import list_threads
 from app.services.thread_service import (
     get_thread as get_thread_service
@@ -93,4 +93,26 @@ def update_thread_route(
         id=thread.id,
         title=thread.title,
         user_id=thread.user_id,
+    )
+
+@router.delete("/{thread_id}")
+def delete_thread_route(
+    thread_id: int,
+    db: Session = Depends(get_db)
+):
+    
+    deleted = delete_thread(
+        db=db,
+        thread_id=thread_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Thread not found"
+        )
+        
+    return DeleteThreadResponse(
+        success=True,
+        message="Thread deleted."
     )
