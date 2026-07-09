@@ -74,3 +74,21 @@ def update_thread(
 
     return curr_thread
 
+def delete_thread(
+        db: Session,
+        thread_id: int
+) -> bool:
+    
+    thread = get_thread(
+        db=db,
+        thread_id=thread_id
+    ) # persistant obj
+
+    if thread is None:
+        return False
+    
+    db.delete(thread)
+
+    db.commit()
+
+    return True
