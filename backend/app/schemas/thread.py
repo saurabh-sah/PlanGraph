@@ -15,3 +15,6 @@ class ThreadResponse(BaseModel):
 class ThreadQuery(BaseModel):
     limit: int = Field(default=10, ge=1, lt=100)
     offset: int = Field(default=0, ge=0)
+
+class ThreadUpdateRequest(BaseModel):
+    title: str

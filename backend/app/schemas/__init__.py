@@ -1,6 +1,6 @@
 from .chat import ChatRequest, ChatResponse
 from .health import HealthResponse
-from .thread import ThreadCreateRequest, ThreadQuery, ThreadResponse
+from .thread import ThreadCreateRequest, ThreadQuery, ThreadResponse, ThreadUpdateRequest
 
 # Add this line to expose the classes
 __all__ = [
@@ -10,4 +10,5 @@ __all__ = [
     "ThreadCreateRequest",
     "ThreadQuery",
     "ThreadResponse",
+    "ThreadUpdateRequest"
 ]
