@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.schemas.thread import ThreadCreateRequest, ThreadQuery, ThreadResponse
+from app.schemas.thread import ThreadCreateRequest, ThreadQuery, ThreadResponse, ThreadUpdateRequest
 
 from sqlalchemy.orm import Session
 
 from backend.app.db.session import get_db
-from backend.app.services.thread_service import create_thread
+from backend.app.services.thread_service import create_thread, update_thread
 from services.thread_service import list_threads
 from app.services.thread_service import (
     get_thread as get_thread_service
@@ -63,6 +63,30 @@ def get_thread_route(
         raise HTTPException(
             status_code=404,
             detail="Thread does not exist",
+        )
+
+    return ThreadResponse(
+        id=thread.id,
+        title=thread.title,
+        user_id=thread.user_id,
+    )
+
+@router.patch("/{thread_id}", response_model=ThreadResponse)
+def update_thread_route(
+    thread_id: int,
+    updated_thread: ThreadUpdateRequest,
+    db: Session = Depends(get_db),
+):
+    thread = update_thread(
+        db=db,
+        thread_id=thread_id,
+        updated_thread=updated_thread
+    )
+
+    if thread is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Thread not found"
         )
 
     return ThreadResponse(
