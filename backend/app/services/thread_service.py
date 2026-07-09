@@ -10,18 +10,24 @@ def create_thread(
     thread_info: ThreadCreateRequest,
 ) -> Thread:
 
-    thread = Thread(
-        title=thread_info.title,
-        user_id=thread_info.user_id,
-    )
+    try:
+        thread = Thread(
+            title=thread_info.title,
+            user_id=thread_info.user_id,
+        )
 
-    db.add(thread)
+        db.add(thread)
 
-    db.commit()
+        db.commit()
 
-    db.refresh(thread)
+        db.refresh(thread)
 
-    return thread
+        return thread
+    
+    except:
+        db.rollback()
+        raise
+
 
 def list_threads(
         db: Session,
@@ -38,6 +44,7 @@ def list_threads(
 
     return threads
 
+
 def get_thread(
     db: Session,
     thread_id: int,
@@ -52,43 +59,55 @@ def get_thread(
 
     return thread
 
+
 def update_thread(
         db: Session,
         thread_id: int,
         updated_thread: ThreadUpdateRequest
 ) -> Thread | None:
     
-    curr_thread = get_thread(
-        db=db,
-        thread_id=thread_id
-    ) # persistant obj
+    try:
+        curr_thread = get_thread(
+            db=db,
+            thread_id=thread_id
+        ) # persistant obj
 
-    if curr_thread is None:
-        return None 
+        if curr_thread is None:
+            return None 
 
-    curr_thread.title = updated_thread.title # dirty tracking
+        curr_thread.title = updated_thread.title # dirty tracking
 
-    db.commit()
+        db.commit()
 
-    db.refresh(curr_thread)
+        db.refresh(curr_thread)
 
-    return curr_thread
+        return curr_thread
+    
+    except:
+        db.rollback()
+        raise
+
 
 def delete_thread(
         db: Session,
         thread_id: int
 ) -> bool:
     
-    thread = get_thread(
-        db=db,
-        thread_id=thread_id
-    ) # persistant obj
+    try:
+        thread = get_thread(
+            db=db,
+            thread_id=thread_id
+        ) # persistant obj
 
-    if thread is None:
-        return False
+        if thread is None:
+            return False
+        
+        db.delete(thread)
+
+        db.commit()
+
+        return True
     
-    db.delete(thread)
-
-    db.commit()
-
-    return True
+    except:
+        db.rollback()
+        raise
