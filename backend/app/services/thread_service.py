@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from app.models.thread import Thread
-from app.schemas import ThreadCreateRequest, ThreadQuery   # <-- later we'll move schemas
+from app.schemas import ThreadCreateRequest, ThreadQuery, ThreadUpdateRequest   # <-- later we'll move schemas
 
 
 def create_thread(
@@ -51,3 +51,26 @@ def get_thread(
     thread = db.execute(stmt).scalar_one_or_none()
 
     return thread
+
+def update_thread(
+        db: Session,
+        thread_id: int,
+        updated_thread: ThreadUpdateRequest
+) -> Thread | None:
+    
+    curr_thread = get_thread(
+        db=db,
+        thread_id=thread_id
+    ) # persistant obj
+
+    if curr_thread is None:
+        return None 
+
+    curr_thread.title = updated_thread.title # dirty tracking
+
+    db.commit()
+
+    db.refresh(curr_thread)
+
+    return curr_thread
+
