@@ -37,3 +37,17 @@ def list_threads(
     threads = db.execute(stmt).scalars().all()
 
     return threads
+
+def get_thread(
+    db: Session,
+    thread_id: int,
+) -> Thread | None:
+
+    stmt = (
+        select(Thread)
+        .where(Thread.id == thread_id)
+    )
+
+    thread = db.execute(stmt).scalar_one_or_none()
+
+    return thread
