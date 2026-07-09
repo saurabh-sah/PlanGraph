@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from app.models.thread import Thread
-from app.schemas import ThreadCreateRequest   # <-- later we'll move schemas
+from app.schemas import ThreadCreateRequest, ThreadQuery   # <-- later we'll move schemas
 
 
 def create_thread(
@@ -21,3 +22,18 @@ def create_thread(
     db.refresh(thread)
 
     return thread
+
+def list_threads(
+        db: Session,
+        thread_info: ThreadQuery
+) -> list[Thread]:
+    
+    stmt = (
+        select(Thread)
+        .limit(thread_info.limit)
+        .offset(thread_info.offset)
+    )
+
+    threads = db.execute(stmt).scalars().all()
+
+    return threads
