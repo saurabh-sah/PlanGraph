@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.get("/threads", response_model=list[ThreadResponse])
+@router.get("/", response_model=list[ThreadResponse])
 def get_threads(
     thread_info: ThreadQuery = Depends(),
     db: Session = Depends(get_db)
@@ -32,7 +32,7 @@ def get_threads(
     ]
 
 
-@router.post("/threads", response_model=ThreadResponse)
+@router.post("/", response_model=ThreadResponse)
 def create_thread_route(
     thread_info: ThreadCreateRequest,
     db: Session = Depends(get_db),
