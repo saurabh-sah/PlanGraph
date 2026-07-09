@@ -6,7 +6,7 @@ router = APIRouter(
     tags=["Chat"]
 )
 
-@router.post("/chat", response_model=ChatResponse)
+@router.post("/", response_model=ChatResponse)
 def chat_response(request: ChatRequest):
     return ChatResponse(
         answer=f"You said: {request.message}",
