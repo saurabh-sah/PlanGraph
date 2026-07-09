@@ -5,56 +5,28 @@ from sqlalchemy.orm import Session
 
 from backend.app.db.session import get_db
 from backend.app.services.thread_service import create_thread
+from services.thread_service import list_threads
 
 router = APIRouter(
     prefix="/threads",
     tags=["Threads"]
 )
 
-# -----------------------------
-# Temporary Fake Data
-# -----------------------------
-
-fake_threads = {
-    1: "LangGraph discussion",
-    2: "FastAPI notes",
-    3: "RAG ideas",
-}
-
 
 @router.get("/threads", response_model=list[ThreadResponse])
-def get_threads(thread_info: ThreadQuery = Depends()):
-    response = []
+def get_threads(
+    thread_info: ThreadQuery = Depends(),
+    db: Session = Depends(get_db)
+):
+    threads = list_threads(db=db, thread_info=thread_info)
 
-    remaining = thread_info.limit
-    skip = thread_info.offset
-
-    for thread_id, title in fake_threads.items():
-
-        if skip > 0:
-            skip -= 1
-            continue
-
-        if remaining == 0:
-            break
-
-        response.append(
-            ThreadResponse(
-                id=thread_id,
-                title=title,
-                user_id=1,  # Temporary until DB-backed
-            )
-        )
-
-        remaining -= 1
-
-    if not response:
-        raise HTTPException(
-            status_code=404,
-            detail="Threads Not Found",
-        )
-
-    return response
+    return [
+        ThreadResponse(
+            id=thread.id,
+            title=thread.title,
+            user_id=thread.user_id
+        ) for thread in threads
+    ]
 
 
 @router.post("/threads", response_model=ThreadResponse)
