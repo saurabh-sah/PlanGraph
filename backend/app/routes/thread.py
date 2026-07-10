@@ -16,19 +16,22 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[ThreadResponse])
+@router.get("/",response_model=list[ThreadResponse])
 def get_threads(
     thread_info: ThreadQuery = Depends(),
     db: Session = Depends(get_db)
 ):
-    threads = list_threads(db=db, thread_info=thread_info)
+
+    threads = list_threads(
+        db=db,
+        thread_info=thread_info
+    )
 
     return [
-        ThreadResponse(
-            id=thread.id,
-            title=thread.title,
-            user_id=thread.user_id
-        ) for thread in threads
+        ThreadResponse.model_validate(
+            thread
+        )
+        for thread in threads
     ]
 
 
@@ -42,33 +45,29 @@ def create_thread_route(
         thread_info=thread_info,
     )
 
-    return ThreadResponse(
-        id=thread.id,
-        title=thread.title,
-        user_id=thread.user_id,
+    return ThreadResponse.model_validate(
+        thread
     )
 
-@router.get("/{thread_id}", response_model=ThreadResponse)
+@router.get("/{thread_id}",response_model=ThreadResponse)
 def get_thread_route(
     thread_id: int,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
 
     thread = get_thread_service(
         db=db,
-        thread_id=thread_id,
+        thread_id=thread_id
     )
 
     if thread is None:
         raise HTTPException(
             status_code=404,
-            detail="Thread does not exist",
+            detail="Thread not found"
         )
 
-    return ThreadResponse(
-        id=thread.id,
-        title=thread.title,
-        user_id=thread.user_id,
+    return ThreadResponse.model_validate(
+        thread
     )
 
 @router.patch("/{thread_id}", response_model=ThreadResponse)
@@ -89,10 +88,8 @@ def update_thread_route(
             detail="Thread not found"
         )
 
-    return ThreadResponse(
-        id=thread.id,
-        title=thread.title,
-        user_id=thread.user_id,
+    return ThreadResponse.model_validate(
+        thread
     )
 
 @router.delete("/{thread_id}")
