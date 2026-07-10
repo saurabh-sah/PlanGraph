@@ -10,7 +10,11 @@ class User(Base):
     __tablename__ = "users"
     id : Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
-    threads: Mapped[list["Thread"]] = relationship("Thread")
+    threads: Mapped[list["Thread"]] = relationship(
+        back_populates="user",
+        cascade= "all, delete-orphan",
+        passive_deletes= True
+    )
 
 # Thread is a class/dataType
 # thread is an object of type User

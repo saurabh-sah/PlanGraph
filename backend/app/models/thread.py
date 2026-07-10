@@ -14,7 +14,11 @@ class Thread(Base):
     
     user_id : Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    user : Mapped["User"] = relationship("User")
+    user : Mapped["User"] = relationship(
+        back_populates="threads",
+        cascade= "all, delete-orphan",
+        passive_deletes=True
+    )
 
 # User is a class/dataType
 # user is an object of type User
