@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Field
+from app.schemas.user import UserResponse
 
 class ThreadCreateRequest(BaseModel):
     title: str
@@ -10,6 +11,12 @@ class ThreadResponse(BaseModel):
     id: int
     title: str
     user_id: int
+
+    user: UserResponse
+
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
 
 class ThreadQuery(BaseModel):
