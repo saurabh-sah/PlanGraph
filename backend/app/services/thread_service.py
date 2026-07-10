@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
 
 from app.models.thread import Thread
@@ -30,32 +30,45 @@ def create_thread(
 
 
 def list_threads(
-        db: Session,
-        thread_info: ThreadQuery
+    db: Session,
+    thread_info: ThreadQuery
 ) -> list[Thread]:
-    
+
     stmt = (
         select(Thread)
+        .options(
+            selectinload(Thread.user)
+        )
         .limit(thread_info.limit)
         .offset(thread_info.offset)
     )
 
-    threads = db.execute(stmt).scalars().all()
+    threads = (
+        db.execute(stmt)
+        .scalars()
+        .all()
+    )
 
     return threads
 
 
 def get_thread(
     db: Session,
-    thread_id: int,
+    thread_id: int
 ) -> Thread | None:
 
     stmt = (
         select(Thread)
         .where(Thread.id == thread_id)
+        .options(
+            selectinload(Thread.user)
+        )
     )
 
-    thread = db.execute(stmt).scalar_one_or_none()
+    thread = (
+        db.execute(stmt)
+        .scalar_one_or_none()
+    )
 
     return thread
 
