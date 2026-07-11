@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .user import User
+    from .message import Message
 
 class Thread(
     Base,
@@ -23,7 +24,10 @@ class Thread(
     )
     
     user_id : Mapped[int] = mapped_column(
-        ForeignKey("users.id"),
+        ForeignKey(
+            "users.id",
+            ondelete="CASCADE"
+        ),
         index=True
     )
 
@@ -31,6 +35,11 @@ class Thread(
         back_populates="threads",
         cascade= "all, delete-orphan",
         passive_deletes=True
+    )
+
+    messages: Mapped[list["Message"]] = relationship(
+        back_populates="thread",
+        cascade="all, delete-orphan"
     )
 
 # User is a class/dataType
