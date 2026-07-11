@@ -1,18 +1,31 @@
 from __future__ import annotations
 from .base import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.models.mixins import TimestampMixin
 from sqlalchemy import ForeignKey
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .user import User
 
-class Thread(Base):
+class Thread(
+    Base,
+    TimestampMixin
+):
     __tablename__ = "threads"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(nullable=False)
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True
+    )
+
+    title: Mapped[str] = mapped_column(
+        nullable=False
+    )
     
-    user_id : Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id : Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        index=True
+    )
 
     user : Mapped["User"] = relationship(
         back_populates="threads",
