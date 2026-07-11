@@ -3,9 +3,9 @@ from app.schemas.thread import ThreadCreateRequest, ThreadQuery, ThreadResponse,
 
 from sqlalchemy.orm import Session
 
-from backend.app.db.session import get_db
-from backend.app.services.thread_service import create_thread, update_thread, delete_thread
-from services.thread_service import list_threads
+from app.db.session import get_db
+from app.services.thread_service import create_thread, update_thread, delete_thread
+from app.services.thread_service import list_threads
 from app.services.thread_service import (
     get_thread as get_thread_service
 )

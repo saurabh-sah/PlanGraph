@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Field
+from pydantic import Field
 from app.schemas.user import UserResponse
 
 class ThreadCreateRequest(BaseModel):
