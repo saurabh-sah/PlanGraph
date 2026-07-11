@@ -39,7 +39,22 @@ class Thread(
 
     messages: Mapped[list["Message"]] = relationship(
         back_populates="thread",
+        foreign_keys="Message.thread_id",
         cascade="all, delete-orphan"
+    )
+
+    active_message_id: Mapped[int | None] = mapped_column(
+        ForeignKey(
+            "messages.id",
+            ondelete="SET NULL"
+        ),
+        nullable=True,
+        index=True
+    )
+
+    active_message: Mapped["Message | None"] = relationship(
+        foreign_keys=[active_message_id],
+        post_update=True
     )
 
 # User is a class/dataType

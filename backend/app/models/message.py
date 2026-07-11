@@ -66,7 +66,8 @@ class Message(Base):
     created_at = TimestampMixin.created_at
 
     thread: Mapped["Thread"] = relationship(
-        back_populates="messages"
+        back_populates="messages",
+        foreign_keys=[thread_id]
     )
 
     # Self Referential Relationships
