@@ -2,3 +2,4 @@ fastapi[standard]
 pydantic-settings
 psycopg[binary]
 sqlalchemy
+alembic
