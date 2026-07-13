@@ -30,3 +30,9 @@ class NodeType(str, Enum):
     MEMORY = "memory"
     RAG = "rag"
     SYNTHESIS = "synthesis"
+
+class ToolCallStatus(str, Enum):
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
