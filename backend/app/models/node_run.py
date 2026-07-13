@@ -27,6 +27,7 @@ from app.models.enums import (
 
 if TYPE_CHECKING:
     from .agent_run import AgentRun
+    from .tool_call import ToolCall
 
 
 class NodeRun(
@@ -138,4 +139,9 @@ class NodeRun(
     child_node_runs: Mapped[list["NodeRun"]] = relationship(
         back_populates="parent_node_run",
         foreign_keys=[parent_node_run_id]
+    )
+
+    tool_calls: Mapped[list["ToolCall"]] = relationship(
+        back_populates="node_run",
+        cascade="all, delete-orphan"
     )
