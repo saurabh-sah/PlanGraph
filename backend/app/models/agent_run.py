@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .message import Message
+    from .node_run import NodeRun
 
 
 class AgentRun(TimestampMixin, Base):
@@ -87,4 +88,9 @@ class AgentRun(TimestampMixin, Base):
     response_message: Mapped["Message | None"] = relationship(
         foreign_keys=[response_message_id],
         back_populates="response_runs"
+    )
+
+    node_runs: Mapped[list["NodeRun"]] = relationship(
+        back_populates="agent_run",
+        cascade="all, delete-orphan"
     )
