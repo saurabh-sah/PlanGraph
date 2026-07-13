@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .thread import Thread
+    from .agent_run import AgentRun
 
 class Message(Base):
 
@@ -78,4 +79,12 @@ class Message(Base):
 
     child_messages: Mapped[list["Message"]] = relationship(
         back_populates="parent_message"
+    )
+
+    triggered_runs: Mapped[list["AgentRun"]] = relationship(
+        foreign_keys="AgentRun.trigger_message_id"
+    )
+
+    response_runs: Mapped[list["AgentRun"]] = relationship(
+        foreign_keys="AgentRun.response_message_id"
     )
