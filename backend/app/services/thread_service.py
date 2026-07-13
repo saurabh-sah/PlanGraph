@@ -2,7 +2,8 @@ from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
 
 from app.models.thread import Thread
-from app.schemas import ThreadCreateRequest, ThreadQuery, ThreadUpdateRequest   # <-- later we'll move schemas
+from app.schemas import ThreadCreateRequest, ThreadUpdateRequest   # <-- later we'll move schemas
+from app.repositories.thread_repository import get_thread
 
 
 def create_thread(
@@ -27,50 +28,6 @@ def create_thread(
     except:
         db.rollback()
         raise
-
-
-def list_threads(
-    db: Session,
-    thread_info: ThreadQuery
-) -> list[Thread]:
-
-    stmt = (
-        select(Thread)
-        .options(
-            selectinload(Thread.user)
-        )
-        .limit(thread_info.limit)
-        .offset(thread_info.offset)
-    )
-
-    threads = (
-        db.execute(stmt)
-        .scalars()
-        .all()
-    )
-
-    return threads
-
-
-def get_thread(
-    db: Session,
-    thread_id: int
-) -> Thread | None:
-
-    stmt = (
-        select(Thread)
-        .where(Thread.id == thread_id)
-        .options(
-            selectinload(Thread.user)
-        )
-    )
-
-    thread = (
-        db.execute(stmt)
-        .scalar_one_or_none()
-    )
-
-    return thread
 
 
 def update_thread(
