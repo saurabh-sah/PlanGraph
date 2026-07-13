@@ -5,10 +5,10 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.services.thread_service import create_thread, update_thread, delete_thread
-from app.services.thread_service import list_threads
-from app.services.thread_service import (
-    get_thread as get_thread_service
-)
+from app.repositories.thread_repository import list_threads
+from app.repositories.thread_repository import get_thread_with_user
+from app.core.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(
     prefix="/threads",
@@ -18,12 +18,16 @@ router = APIRouter(
 
 @router.get("/",response_model=list[ThreadResponse])
 def get_threads(
+    current_user: User = Depends(
+        get_current_user
+    ),
     thread_info: ThreadQuery = Depends(),
     db: Session = Depends(get_db)
 ):
 
     threads = list_threads(
         db=db,
+        user_id=current_user.id,
         thread_info=thread_info
     )
 
@@ -55,7 +59,7 @@ def get_thread_route(
     db: Session = Depends(get_db)
 ):
 
-    thread = get_thread_service(
+    thread = get_thread_with_user(
         db=db,
         thread_id=thread_id
     )
