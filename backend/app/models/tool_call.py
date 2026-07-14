@@ -20,7 +20,7 @@ from sqlalchemy.orm import (
 
 from app.models.base import Base
 from app.models.mixins import TimestampMixin
-from app.models.enums import ToolCallStatus
+from app.models.enums import ExecutionStatus
 
 
 if TYPE_CHECKING:
@@ -77,9 +77,9 @@ class ToolCall(
     # Execution State
     # ==========================================
 
-    status: Mapped[ToolCallStatus] = mapped_column(
+    status: Mapped[ExecutionStatus] = mapped_column(
         Enum(
-            ToolCallStatus,
+            ExecutionStatus,
             name="tool_call_status",
             values_callable=lambda x: [
                 e.value
@@ -87,7 +87,7 @@ class ToolCall(
             ]
         ),
         nullable=False,
-        default=ToolCallStatus.PENDING,
+        default=ExecutionStatus.PENDING,
         server_default="pending",
         index=True
     )

@@ -17,12 +17,13 @@ from sqlalchemy.orm import (
 
 from app.models.base import Base
 from app.models.mixins import TimestampMixin
-from app.models.enums import AgentRunStatus
+from app.models.enums import ExecutionStatus
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .message import Message
     from .node_run import NodeRun
+    from .task import Task
 
 
 class AgentRun(TimestampMixin, Base):
@@ -50,14 +51,14 @@ class AgentRun(TimestampMixin, Base):
         index=True
     )
 
-    status: Mapped[AgentRunStatus] = mapped_column(
+    status: Mapped[ExecutionStatus] = mapped_column(
         Enum(
-            AgentRunStatus,
+            ExecutionStatus,
             name="agent_run_status",
             values_callable=lambda x: [e.value for e in x]
         ),
-        default=AgentRunStatus.PENDING,
-        server_default=AgentRunStatus.PENDING.value,
+        default=ExecutionStatus.PENDING,
+        server_default=ExecutionStatus.PENDING.value,
         nullable=False,
         index=True
     )
@@ -91,6 +92,11 @@ class AgentRun(TimestampMixin, Base):
     )
 
     node_runs: Mapped[list["NodeRun"]] = relationship(
+        back_populates="agent_run",
+        cascade="all, delete-orphan"
+    )
+
+    tasks: Mapped[list["Task"]] = relationship(
         back_populates="agent_run",
         cascade="all, delete-orphan"
     )

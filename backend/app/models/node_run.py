@@ -21,12 +21,12 @@ from sqlalchemy.orm import (
 from app.models.base import Base
 from app.models.mixins import TimestampMixin
 from app.models.enums import (
-    NodeRunStatus,
+    ExecutionStatus,
     NodeType
 )
 
 if TYPE_CHECKING:
-    from .agent_run import AgentRun
+    from .task_run import TaskRun
     from .tool_call import ToolCall
 
 
@@ -40,9 +40,9 @@ class NodeRun(
         primary_key=True
     )
 
-    agent_run_id: Mapped[int] = mapped_column(
+    task_run_id: Mapped[int] = mapped_column(
         ForeignKey(
-            "agent_runs.id",
+            "task_runs.id",
             ondelete="CASCADE"
         ),
         index=True,
@@ -77,16 +77,16 @@ class NodeRun(
         index=True
     )
 
-    status: Mapped[NodeRunStatus] = mapped_column(
+    status: Mapped[ExecutionStatus] = mapped_column(
         Enum(
-            NodeRunStatus,
+            ExecutionStatus,
             name="node_run_status",
             values_callable=lambda x: [
                 e.value
                 for e in x
             ]
         ),
-        default=NodeRunStatus.PENDING,
+        default=ExecutionStatus.PENDING,
         server_default="pending",
         nullable=False,
         index=True
@@ -126,7 +126,7 @@ class NodeRun(
     # Relationships
     # ========================
 
-    agent_run: Mapped["AgentRun"] = relationship(
+    task_run: Mapped["TaskRun"] = relationship(
         back_populates="node_runs"
     )
 

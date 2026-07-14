@@ -4,6 +4,8 @@ from app.models.message import Message
 from app.models.agent_run import AgentRun
 from app.models.node_run import NodeRun
 from app.models.tool_call import ToolCall
+from app.models.task_run import TaskRun
+from app.models.task import Task
 
 __all__ = [
     User,
@@ -12,4 +14,6 @@ __all__ = [
     AgentRun,
     NodeRun,
     ToolCall,
+    Task,
+    TaskRun
 ]
