@@ -6,6 +6,11 @@ from app.models.node_run import NodeRun
 from app.models.tool_call import ToolCall
 from app.models.task_run import TaskRun
 from app.models.task import Task
+from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
+from app.models.thread_memory import ThreadMemory
+from app.models.thread_summary import ThreadSummary
+from app.models.user_memory import UserMemory
 
 __all__ = [
     User,
@@ -15,5 +20,10 @@ __all__ = [
     NodeRun,
     ToolCall,
     Task,
-    TaskRun
+    TaskRun,
+    Document,
+    DocumentChunk,
+    ThreadMemory,
+    ThreadSummary,
+    UserMemory,
 ]
