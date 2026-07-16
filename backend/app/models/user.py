@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .thread import Thread
+    from .user_memory import UserMemory
+    from .document import Document
 
 class User(
     Base,
@@ -25,6 +27,15 @@ class User(
         back_populates="user",
         cascade= "all, delete-orphan",
         passive_deletes= True
+    )
+
+    memories: Mapped[list["UserMemory"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    documents: Mapped[list["Document"]] = relationship(
+        back_populates="user"
     )
 
 # Thread is a class/dataType
