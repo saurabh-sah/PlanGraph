@@ -8,6 +8,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .user import User
     from .message import Message
+    from .thread_memory import ThreadMemory
+    from .thread_summary import ThreadSummary
+    from .document import Document
 
 class Thread(
     Base,
@@ -55,6 +58,21 @@ class Thread(
     active_message: Mapped["Message | None"] = relationship(
         foreign_keys=[active_message_id],
         post_update=True
+    )
+
+    thread_memories: Mapped[list["ThreadMemory"]] = relationship(
+        back_populates="thread",
+        cascade="all, delete-orphan"
+    )
+
+    summary: Mapped["ThreadSummary | None"] = relationship(
+        back_populates="thread",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+    documents: Mapped[list["Document"]] = relationship(
+        back_populates="thread"
     )
 
 # User is a class/dataType
