@@ -1,3 +1,14 @@
+from app.models.enums import (
+    AgentType
+)
+
+VALID_AGENT_TYPES = ", ".join(
+    [
+        e.value
+        for e in AgentType
+    ]
+)
+
 PLANNER_SYSTEM_PROMPT = """
 You are a planning agent.
 
@@ -9,6 +20,14 @@ You are provided:
 4. Documents
 
 Break the user's request into a DAG of tasks.
+
+Valid agent types:
+
+{VALID_AGENT_TYPES}
+
+Never invent new agent types.
+
+Return structured output only.
 
 Rules:
 
