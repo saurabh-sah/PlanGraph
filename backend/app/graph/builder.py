@@ -10,6 +10,10 @@ from app.graph.nodes.load_context import (
     load_context_node
 )
 
+from app.graph.nodes.context_retrieval import (
+    context_retrieval_node
+)
+
 from app.graph.nodes.planner import (
     planner_node
 )
@@ -18,11 +22,11 @@ from app.graph.nodes.persist_plan import (
     persist_plan_node
 )
 
-from app.graph.scheduler.scheduler import (
+from app.graph.nodes.scheduler_node import (
     scheduler_node
 )
 
-from app.graph.executors.executor import (
+from app.graph.nodes.executor_node import (
     executor_node
 )
 
@@ -34,6 +38,13 @@ from app.graph.router import (
     route_after_scheduler
 )
 
+from functools import lru_cache
+
+@lru_cache
+def get_graph():
+
+    return build_graph()
+
 
 def build_graph():
 
@@ -44,6 +55,11 @@ def build_graph():
     graph.add_node(
         "load_context",
         load_context_node
+    )
+
+    graph.add_node(
+        "context_retrieval",
+        context_retrieval_node
     )
 
     graph.add_node(
@@ -78,6 +94,11 @@ def build_graph():
 
     graph.add_edge(
         "load_context",
+        "context_retrieval"
+    )
+
+    graph.add_edge(
+        "context_retrieval",
         "planner"
     )
 
