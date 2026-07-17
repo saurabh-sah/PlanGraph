@@ -1,38 +1,53 @@
 from app.graph.state import GraphState
 
+from app.services.executor_service import (
+    execute_task_run
+)
+
 
 def executor_node(
     state: GraphState,
+    config,
 ):
+    db = config["configurable"]["db"]
 
-    print("executor called")
-    print(state)
-    
     ready = state.get(
         "ready_task_run_ids",
         []
     )
 
     if not ready:
-
         return {}
 
-    executed = ready[0]
+    task_results = {}
+
+    completed = set()
+
+    for task_run_id in ready:
+
+        result = execute_task_run(
+            db=db,
+            task_run_id=task_run_id
+        )
+
+        task_results[
+            task_run_id
+        ] = result
+
+        completed.add(
+            task_run_id
+        )
+
+    db.commit()
 
     return {
 
-        "task_results": {
+        "task_results":
+            task_results,
 
-            executed: {
+        "completed_task_run_ids":
+            completed,
 
-                "response":
-                    "Hello from executor."
-            }
-        },
-
-        "completed_task_run_ids": {
-            executed
-        },
-
-        "ready_task_run_ids": []
+        "ready_task_run_ids":
+            []
     }
