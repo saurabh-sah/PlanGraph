@@ -79,7 +79,9 @@ class TaskRun(
         nullable=True
     )
 
-    error_message: Mapped[str | None]
+    error_message: Mapped[str | None] = mapped_column(
+        nullable=True
+    )
 
     attempt_number: Mapped[int] = mapped_column(
         default=1,

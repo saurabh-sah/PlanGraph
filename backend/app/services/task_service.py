@@ -1,7 +1,9 @@
 from app.models.task import Task
+from app.models.task_run import TaskRun
 from app.models.enums import (
     TaskStatus,
-    TaskPriority
+    TaskPriority, 
+    ExecutionStatus
 )
 
 
@@ -12,10 +14,9 @@ def persist_plan(
 ):
 
     tasks = []
+    task_runs = []
 
-    for position, spec in enumerate(
-        plan.tasks
-    ):
+    for position, spec in enumerate(plan.tasks):
 
         task = Task(
 
@@ -37,7 +38,7 @@ def persist_plan(
 
             position=position,
 
-            is_terminal=spec.is_terminal
+            is_terminal=spec.is_terminal,
         )
 
         db.add(task)
@@ -46,4 +47,21 @@ def persist_plan(
 
     db.flush()
 
-    return tasks
+    for task in tasks:
+
+        task_run = TaskRun(
+
+            task_id=task.id,
+
+            status=ExecutionStatus.PENDING,
+
+            attempt_number=1,
+        )
+
+        db.add(task_run)
+
+        task_runs.append(task_run)
+
+    db.flush()
+
+    return tasks, task_runs

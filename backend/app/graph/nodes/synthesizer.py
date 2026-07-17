@@ -5,8 +5,13 @@ def synthesizer_node(
     state: GraphState,
 ):
 
+    results = state.get(
+        "task_results",
+        {}
+    )
+
     return {
 
         "final_response":
-            "Runtime skeleton executed successfully."
+            str(results)
     }

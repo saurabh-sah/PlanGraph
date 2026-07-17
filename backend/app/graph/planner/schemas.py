@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field
-
+from app.models.enums import (
+    AgentType,
+    TaskPriority
+)
 
 class Dependency(
     BaseModel
@@ -15,13 +18,15 @@ class TaskSpec(BaseModel):
 
     objective: str
 
-    agent_type: str
+    agent_type: AgentType
 
     depends_on: list[int] = Field(
         default_factory=list
     )
 
-    priority: str = "medium"
+    priority: TaskPriority = (
+        TaskPriority.MEDIUM
+    )
 
     is_terminal: bool = False
 

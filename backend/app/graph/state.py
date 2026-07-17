@@ -18,6 +18,8 @@ class GraphState(
     thread_id: int
     trigger_message_id: int
     agent_run_id: int
+    llm_provider: str | None
+    llm_model: str | None
 
     # conversation
 
@@ -39,9 +41,9 @@ class GraphState(
 
     ready_task_run_ids: list[int]
 
-    completed_task_ids: set[int]
+    completed_task_run_ids: set[int]
 
-    failed_task_ids: set[int]
+    failed_task_run_ids: set[int]
 
     task_results: dict[int, dict]
 

@@ -5,6 +5,12 @@ def scheduler_node(
     state: GraphState,
 ):
 
+    print("scheduler called")
+    
     return {
-        "ready_task_run_ids": []
+        "ready_task_run_ids":
+            state.get(
+                "ready_task_run_ids",
+                []
+            )
     }
