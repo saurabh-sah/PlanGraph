@@ -27,3 +27,11 @@ def to_langchain_message(
     return SystemMessage(
         content=msg.content
     )
+
+def to_chat_history(
+    messages,
+):
+    return [
+        to_langchain_message(m)
+        for m in messages
+    ]
