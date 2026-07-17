@@ -2,9 +2,11 @@ from app.graph.state import GraphState
 
 
 def synthesizer_node(
-    state: GraphState
+    state: GraphState,
 ):
 
     return {
-        "final_response": ""
+
+        "final_response":
+            "Runtime skeleton executed successfully."
     }

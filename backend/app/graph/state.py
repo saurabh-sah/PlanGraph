@@ -19,11 +19,19 @@ class GraphState(
     trigger_message_id: int
     agent_run_id: int
 
-    # runtime messages
+    # conversation
 
     messages: list[BaseMessage]
 
-    # planner
+    # retrieval
+
+    retrieved_memories: list[dict]
+
+    retrieved_documents: list[dict]
+
+    planner_context: str | None
+
+    # planning
 
     planner_output: PlannerOutput | None
 
@@ -37,6 +45,6 @@ class GraphState(
 
     task_results: dict[int, dict]
 
-    # final output
+    # final response
 
     final_response: str | None

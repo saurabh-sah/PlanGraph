@@ -2,7 +2,10 @@ from app.graph.state import GraphState
 
 
 def persist_plan_node(
-    state: GraphState
+    state: GraphState,
+    config,
 ):
 
-    return {}
+    return {
+        "ready_task_run_ids": []
+    }

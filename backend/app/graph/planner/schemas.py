@@ -30,4 +30,4 @@ class PlannerOutput(BaseModel):
 
     tasks: list[TaskSpec]
 
-    planner_reasoning: str | None = None
+    reasoning: str | None = None

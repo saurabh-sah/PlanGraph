@@ -7,7 +7,7 @@ from app.models.enums import (
 
 def persist_plan(
     db,
-    agent_run,
+    agent_run_id: int,
     plan
 ):
 
@@ -19,7 +19,7 @@ def persist_plan(
 
         task = Task(
 
-            agent_run=agent_run,
+            agent_run_id=agent_run_id,
 
             title=spec.title,
 

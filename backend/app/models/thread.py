@@ -36,7 +36,6 @@ class Thread(
 
     user : Mapped["User"] = relationship(
         back_populates="threads",
-        cascade= "all, delete-orphan",
         passive_deletes=True
     )
 

@@ -91,10 +91,10 @@ class AgentRun(TimestampMixin, Base):
         back_populates="response_runs"
     )
 
-    node_runs: Mapped[list["NodeRun"]] = relationship(
-        back_populates="agent_run",
-        cascade="all, delete-orphan"
-    )
+    # node_runs: Mapped[list["NodeRun"]] = relationship(
+    #     back_populates="agent_run",
+    #     cascade="all, delete-orphan"
+    # )
 
     tasks: Mapped[list["Task"]] = relationship(
         back_populates="agent_run",

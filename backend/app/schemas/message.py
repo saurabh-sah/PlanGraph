@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-from models.enums import MessageRole
+from app.models.enums import MessageRole
 
 class MessageCreateRequest(BaseModel):
     thread_id: int
